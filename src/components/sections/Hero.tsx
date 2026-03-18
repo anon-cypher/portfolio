@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Terminal, Download, Github, ArrowRight } from "lucide-react";
+import { Terminal, Download, Github, Linkedin, Mail, ArrowRight } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sphere, MeshDistortMaterial } from "@react-three/drei";
 
@@ -91,10 +91,10 @@ export function HeroSection() {
 
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white/90 leading-[1.1]">
                             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">
-                                I Architect
+                                I Build
                             </span>
                             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#b000ff] to-[#00f0ff] animate-gradient-shift bg-[length:200%_auto]">
-                                <Typewriter text="Intelligent Machines." delay={800} />
+                                <Typewriter text="S\calable AI Systems." delay={500} />
                             </span>
                         </h1>
 
@@ -105,9 +105,11 @@ export function HeroSection() {
                             className="text-lg md:text-xl text-white/60 max-w-lg font-mono"
                         >
                             &gt; AI Systems Engineer<br />
-                            &gt; GenAI + Agentic AI<br />
-                            &gt; Computer Vision<br />
-                            &gt; LLM Infrastructure
+                            &gt; Agentic AI & Multi-Agent Systems<br />
+                            &gt; LLM Infrastructure, RAG & Vector DBs<br />
+                            &gt; GenAI, LLMOps & Deployment Pipelines<br />
+                            &gt; MLOps, CI/CD & Production Workflows<br />
+                            &gt; Computer Vision & Multimodal Models
                         </motion.p>
                     </div>
 
@@ -120,12 +122,16 @@ export function HeroSection() {
                         <Button variant="glow" size="lg" className="w-full sm:w-auto">
                             Explore Systems <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                            <Download className="mr-2 h-4 w-4" /> Download Resume
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-12 w-12 rounded-full border border-white/10">
-                            <Github className="h-5 w-5" />
-                        </Button>
+                        <a href="/ShubhamGupta_Resume.pdf" download="ShubhamGupta_Resume.pdf" className="w-full sm:w-auto">
+                            <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                                <Download className="mr-2 h-4 w-4" /> Download Resume
+                            </Button>
+                        </a>
+                        <a href="https://github.com/anon-cypher" target="_blank" rel="noopener noreferrer">
+                            <Button variant="ghost" size="icon" className="h-12 w-12 rounded-full border border-white/10 hover:text-[#00f0ff] hover:border-[#00f0ff]/50 transition-all">
+                                <Github className="h-5 w-5" />
+                            </Button>
+                        </a>
                     </motion.div>
                 </motion.div>
 

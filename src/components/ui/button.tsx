@@ -53,6 +53,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             y.set(e.clientY - rect.top);
         }
 
+        const background = useMotionTemplate`
+            radial-gradient(
+                120px circle at ${x}px ${y}px,
+                rgba(0, 240, 255, 0.4),
+                transparent 80%
+            )
+        `;
+
         if (variant === "glow") {
             return (
                 <Comp
@@ -63,20 +71,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                     ref={ref}
                     {...props}
                 >
-                    {isHovered && (
-                        <motion.div
-                            className="absolute inset-0 z-0 pointer-events-none opacity-50 transition-opacity duration-300"
-                            style={{
-                                background: useMotionTemplate`
-                  radial-gradient(
-                    120px circle at ${x}px ${y}px,
-                    rgba(0, 240, 255, 0.4),
-                    transparent 80%
-                  )
-                `,
-                            }}
-                        />
-                    )}
+                    <motion.div
+                        className="absolute inset-0 z-0 pointer-events-none opacity-50 transition-opacity duration-300"
+                        style={{
+                            background,
+                            opacity: isHovered ? 1 : 0,
+                        }}
+                    />
                     <span className="relative z-10 flex border-white/20 items-center justify-center space-x-2">
                         {props.children}
                     </span>

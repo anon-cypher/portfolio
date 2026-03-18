@@ -1,141 +1,201 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Database, Server, Smartphone, Cpu, Network, Combine, ArrowRight } from "lucide-react";
+import {
+    Brain,
+    Layers,
+    Database,
+    Rocket,
+    Cloud,
+    Code,
+    CheckCircle2,
+    Cpu,
+    CpuIcon,
+    Terminal,
+    Workflow,
+    Search,
+    ShieldCheck,
+    CpuIcon as Chips
+} from "lucide-react";
 
-interface NodeProps {
-    id: string;
-    label: string;
+interface SkillCategory {
+    title: string;
     icon: React.ReactNode;
-    tech: string[];
-    isActive: boolean;
-    onHover: (id: string | null) => void;
+    color: string;
+    skills: {
+        name: string;
+        items: string[];
+    }[];
 }
 
-const ArchNode = ({ id, label, icon, tech, isActive, onHover }: NodeProps) => {
-    return (
-        <div
-            className="relative flex flex-col items-center"
-            onMouseEnter={() => onHover(id)}
-            onMouseLeave={() => onHover(null)}
-        >
-            <motion.div
-                animate={{
-                    scale: isActive ? 1.1 : 1,
-                    boxShadow: isActive
-                        ? "0 0 20px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2)"
-                        : "0 0 0px rgba(0,0,0,0)",
-                    borderColor: isActive ? "rgba(0, 240, 255, 0.8)" : "rgba(255, 255, 255, 0.1)",
-                }}
-                className="w-20 h-20 md:w-24 md:h-24 rounded-2xl glass-panel flex items-center justify-center cursor-pointer relative z-10 bg-surface/80"
-            >
-                {icon}
-            </motion.div>
-            <span className="mt-3 text-sm font-mono font-medium text-white/80 text-center w-24">
-                {label}
-            </span>
+const skillCategories: SkillCategory[] = [
+    {
+        title: "AI / ML & GenAI",
+        icon: <Brain className="w-6 h-6" />,
+        color: "#00f0ff",
+        skills: [
+            { name: "Machine Learning", items: ["Deep Learning"] },
+            { name: "Generative AI", items: ["Large Language Models (LLMs)"] },
+            { name: "Agentic AI", items: ["Autonomous Workflows", "Multi-Agent Systems"] },
+            { name: "Retrieval", items: ["RAG Systems"] },
+            { name: "Computer Vision", items: ["OCR (TrOCR, rOCR)"] },
+            { name: "Optimization", items: ["Reinforcement Learning", "Genetic Algorithms"] },
+        ],
+    },
+    {
+        title: "Frameworks & Libraries",
+        icon: <Layers className="w-6 h-6" />,
+        color: "#b000ff",
+        skills: [
+            { name: "LLM / Agents", items: ["LangChain", "LangGraph", "AutoGen"] },
+            { name: "Deep Learning", items: ["PyTorch", "TensorFlow", "Keras"] },
+            { name: "ML & Data", items: ["Scikit-Learn", "Pandas", "NumPy"] },
+            { name: "CV & Viz", items: ["OpenCV", "Matplotlib", "Seaborn"] },
+            { name: "NLP", items: ["Hugging Face Transformers"] },
+        ],
+    },
+    {
+        title: "LLM & Data Infra",
+        icon: <Database className="w-6 h-6" />,
+        color: "#00ffcc",
+        skills: [
+            { name: "Vector DBs", items: ["FAISS", "Pinecone", "ChromaDB"] },
+            { name: "Knowledge", items: ["RAG Pipelines", "Retrieval Systems"] },
+            { name: "LLM APIs", items: ["OpenAI API"] },
+            { name: "Search", items: ["Embedding", "Semantic Search"] },
+        ],
+    },
+    {
+        title: "MLOps & Deployment",
+        icon: <Rocket className="w-6 h-6" />,
+        color: "#ff3366",
+        skills: [
+            { name: "Tools", items: ["Docker", "MLflow", "Jenkins"] },
+            { name: "APIs", items: ["FastAPI", "Streamlit"] },
+            { name: "Workflows", items: ["Model Deployment", "API Dev"] },
+            { name: "Automation", items: ["Tracking", "Pipeline Auto"] },
+        ],
+    },
+    {
+        title: "Cloud, DevOps & Data",
+        icon: <Cloud className="w-6 h-6" />,
+        color: "#ffcc00",
+        skills: [
+            { name: "AWS", items: ["EC2", "S3", "Lambda"] },
+            { name: "Ops", items: ["Git", "CI/CD", "Bash"] },
+            { name: "DBs", items: ["MySQL", "PostgreSQL", "MongoDB"] },
+        ],
+    },
+    {
+        title: "Programming",
+        icon: <Code className="w-6 h-6" />,
+        color: "#ffffff",
+        skills: [
+            { name: "Primary", items: ["Python"] },
+            { name: "Secondary", items: ["JavaScript", "SQL"] },
+        ],
+    },
+];
 
-            {/* Tech tooltip */}
-            <motion.div
-                initial={{ opacity: 0, y: 10, pointerEvents: "none" }}
-                animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-                className="absolute top-28 md:top-32 w-48 p-4 glass-panel rounded-lg z-20 shadow-2xl"
-            >
-                <div className="flex flex-wrap gap-2">
-                    {tech.map((t) => (
-                        <Badge variant="cyber" key={t}>{t}</Badge>
-                    ))}
+const SkillCard = ({ category }: { category: SkillCategory }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -5 }}
+            className="glass-panel p-6 rounded-2xl relative overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-300"
+        >
+            <div
+                className="absolute top-0 right-0 w-24 h-24 blur-[60px] opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+                style={{ backgroundColor: category.color }}
+            />
+
+            <div className="flex items-center space-x-3 mb-6">
+                <div
+                    className="p-2 rounded-lg bg-white/5 border border-white/10"
+                    style={{ color: category.color }}
+                >
+                    {category.icon}
                 </div>
-            </motion.div>
-        </div>
+                <h4 className="text-lg font-bold text-white/90">{category.title}</h4>
+            </div>
+
+            <div className="space-y-4">
+                {category.skills.map((skill, idx) => (
+                    <div key={idx} className="space-y-1">
+                        <div className="flex items-start">
+                            <CheckCircle2 className="w-4 h-4 mt-1 mr-2 flex-shrink-0 opacity-40 group-hover:opacity-100 transition-opacity" style={{ color: category.color }} />
+                            <div>
+                                <span className="text-sm font-semibold text-white/70 block">{skill.name}</span>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                    {skill.items.map((item, i) => (
+                                        <span key={i} className="text-[10px] uppercase tracking-wider font-mono text-white/40 group-hover:text-white/60 transition-colors">
+                                            {item}{i < skill.items.length - 1 ? "," : ""}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </motion.div>
     );
 };
 
 export function ArchitectureSection() {
-    const [activeNode, setActiveNode] = useState<string | null>(null);
-
-    const nodes = [
-        { id: "source", label: "User / Edge", icon: <Smartphone className="w-8 h-8 text-white/70" />, tech: ["React", "React Native", "IoT"] },
-        { id: "pipe", label: "Data Pipeline", icon: <Network className="w-8 h-8 text-white/70" />, tech: ["Kafka", "Airflow", "Spark"] },
-        { id: "train", label: "Model Training", icon: <Cpu className="w-8 h-8 text-[#00f0ff]" />, tech: ["PyTorch", "MLflow", "CUDA"] },
-        { id: "vector", label: "Vector DB", icon: <Database className="w-8 h-8 text-[#b000ff]" />, tech: ["FAISS", "Pinecone", "Milvus"] },
-        { id: "llm", label: "LLM / RAG", icon: <Combine className="w-8 h-8 text-[#00ffcc]" />, tech: ["LangChain", "OpenAI", "HuggingFace"] },
-        { id: "deploy", label: "API & Edge Deployment", icon: <Server className="w-8 h-8 text-white/70" />, tech: ["FastAPI", "Docker", "AWS", "TensorRT"] },
-    ];
-
     return (
-        <section id="architecture" className="relative py-24 z-10 bg-black/40">
-            <div className="absolute inset-0 bg-cyber-grid opacity-30 pointer-events-none mix-blend-overlay"></div>
+        <section id="architecture" className="relative py-32 z-10 bg-[#0A0F1C]/50 backdrop-blur-3xl overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00f0ff]/5 rounded-full blur-[120px] pointer-events-none animate-pulse" />
+            <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#b000ff]/5 rounded-full blur-[120px] pointer-events-none animate-pulse delay-700" />
 
             <div className="container mx-auto px-6 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="mb-16 text-center"
+                    className="mb-20 text-center"
                 >
-                    <h2 className="text-sm font-mono text-[#b000ff] mb-2 tracking-widest uppercase">
-            // SYSTEM_ARCHITECTURE
+                    <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono text-white/60 mb-6 uppercase tracking-widest">
+                        <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-ping" />
+                        <span>TECHNICAL_STACK_OVERRIDE</span>
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
+                        Technical Skills <br />
+                        {/* <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#b000ff]">(Refined & Structured)</span> */}
                     </h2>
-                    <h3 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
-                        End-to-End Pipeline
-                    </h3>
-                    <p className="mt-4 text-white/60 max-w-2xl mx-auto">
-                        Hover over nodes to inspect the technology stack powering my autonomous systems.
-                    </p>
                 </motion.div>
 
-                {/* Desktop Pipeline View */}
-                <div className="hidden md:flex flex-row items-center justify-center gap-2 lg:gap-6 mt-12 pb-32">
-                    {nodes.map((node, i) => (
-                        <React.Fragment key={node.id}>
-                            <ArchNode
-                                {...node}
-                                isActive={activeNode === node.id}
-                                onHover={setActiveNode}
-                            />
-                            {i < nodes.length - 1 && (
-                                <div className="relative w-8 lg:w-16 h-0.5 flex items-center justify-center -mt-8">
-                                    <div className="absolute inset-0 bg-white/10" />
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-r from-[#00f0ff] to-[#b000ff] shadow-[0_0_10px_#00f0ff]"
-                                        initial={{ scaleX: 0, transformOrigin: "left" }}
-                                        whileInView={{ scaleX: 1 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.2 + 0.5, duration: 0.5 }}
-                                    />
-                                    <ArrowRight className="absolute text-white/50 w-4 h-4 translate-x-3 lg:translate-x-6" />
-                                </div>
-                            )}
-                        </React.Fragment>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {skillCategories.map((category, index) => (
+                        <SkillCard key={index} category={category} />
                     ))}
                 </div>
 
-                {/* Mobile Pipeline View - Vertical */}
-                <div className="md:hidden flex flex-col items-center gap-6 mt-12 pb-12">
-                    {nodes.map((node, i) => (
-                        <React.Fragment key={node.id}>
-                            <ArchNode
-                                {...node}
-                                isActive={activeNode === node.id}
-                                onHover={setActiveNode}
-                            />
-                            {i < nodes.length - 1 && (
-                                <div className="w-[1px] h-8 bg-white/20 relative">
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-b from-[#00f0ff] to-[#b000ff]"
-                                        initial={{ scaleY: 0, transformOrigin: "top" }}
-                                        whileInView={{ scaleY: 1 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.2 + 0.5, duration: 0.5 }}
-                                    />
-                                </div>
-                            )}
-                        </React.Fragment>
-                    ))}
-                </div>
+                {/* <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 1 }}
+                    className="mt-20 flex justify-center"
+                >
+                    <div className="glass-panel px-6 py-3 rounded-full border border-white/5 flex items-center space-x-8">
+                        <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 rounded-full bg-[#00f0ff]" />
+                            <span className="text-xs font-mono text-white/40 uppercase">AI Systems</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 rounded-full bg-[#b000ff]" />
+                            <span className="text-xs font-mono text-white/40 uppercase">GenAI Architect</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 rounded-full bg-white/40" />
+                            <span className="text-xs font-mono text-white/40 uppercase">MLOps Engineer</span>
+                        </div>
+                    </div>
+                </motion.div> */}
             </div>
         </section>
     );

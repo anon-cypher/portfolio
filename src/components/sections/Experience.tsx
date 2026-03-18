@@ -7,21 +7,21 @@ const experiences = [
     {
         role: "AI Systems Engineer",
         company: "HL Mando",
-        period: "2023 - Present",
+        period: "May 2023 - Jan 2026",
         description: "Led AI optimization workflows and automated manual quality checks using Computer Vision. Designed multi-cloud pipelines for deploying optimized models globally. Applied Genetic Algorithms and Reinforcement Learning for component optimization.",
         tags: ["CV Automation", "GA + RL", "Production Deployment", "Multi-Cloud"],
     },
     {
-        role: "Machine Learning Engineer",
+        role: "Security Automation Engineer",
         company: "BreachLock",
-        period: "2021 - 2023",
+        period: "Feb 2022 - Jul 2022",
         description: "Architected security automation pipelines. Developed language models for automated vulnerability reporting, reducing manual report generation time significantly.",
         tags: ["LLMs", "Pipeline Automation", "Cybersecurity AI"],
     },
     {
-        role: "CV Researcher",
+        role: "AI Intern",
         company: "ThinkingStack",
-        period: "2020 - 2021",
+        period: "Aug 2021 - Jan 2021",
         description: "Built YOLO-based Automatic Number Plate Recognition (ANPR) systems and developed highly scalable edge nodes for real-time processing.",
         tags: ["YOLO", "ANPR", "Edge AI"],
     }

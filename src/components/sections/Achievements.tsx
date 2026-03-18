@@ -5,10 +5,11 @@ import { motion } from "framer-motion";
 import { Trophy, Star, Award, Medal } from "lucide-react";
 
 const achievements = [
+    { title: "HL Global Excellence Award", icon: <Medal className="w-8 h-8 text-[#00f0ff]" />, delay: 0.1 },
     { title: "2nd Prize IRTC Research", icon: <Trophy className="w-8 h-8 text-yellow-400" />, delay: 0 },
     { title: "Spotlight Award", icon: <Star className="w-8 h-8 text-[#00f0ff]" />, delay: 0.2 },
-    { title: "Best Project Award", icon: <Award className="w-8 h-8 text-[#b000ff]" />, delay: 0.4 },
-    { title: "MSI Contribution Award", icon: <Medal className="w-8 h-8 text-[#00ffcc]" />, delay: 0.6 },
+    { title: "Best Project Award", icon: <Award className="w-8 h-8 text-[#b000ff]" />, delay: 0.3 },
+    { title: "MSI Contribution Award", icon: <Medal className="w-8 h-8 text-[#00ffcc]" />, delay: 0.4 },
 ];
 
 export function AchievementsSection() {

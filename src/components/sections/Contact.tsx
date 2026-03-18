@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Send, Mail, Linkedin, Github } from "lucide-react";
+import { Mail, Linkedin, Github } from "lucide-react";
 
 export function ContactSection() {
-    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <section id="contact" className="relative py-32 z-10 bg-gradient-to-t from-[#0A0F1C] to-transparent">
@@ -24,49 +22,37 @@ export function ContactSection() {
                         Whether you need scalable LLM infrastructure, edge CV models, or a fully connected autonomous pipeline, my systems are ready. Let's connect.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                        <Button
-                            variant="glow"
-                            size="lg"
-                            className="w-full sm:w-auto overflow-hidden group relative"
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)}
-                        >
-                            <div className="absolute inset-0 bg-[#00f0ff]/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <span className="relative z-10 flex items-center">
-                                Initialize Contact <Send className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                            </span>
-
-                            {/* Ripple Effect on Hover */}
-                            {isHovered && (
-                                <motion.div
-                                    initial={{ scale: 0, opacity: 0.5 }}
-                                    animate={{ scale: 2, opacity: 0 }}
-                                    transition={{ duration: 0.8 }}
-                                    className="absolute inset-0 bg-white/20 rounded-full"
-                                />
-                            )}
-                        </Button>
+                    <div className="mb-12">
+                        <p className="text-sm font-mono text-[#00f0ff] animate-pulse">
+                            &gt; choose_communication_channel --mode="direct_message"
+                        </p>
                     </div>
 
-                    <div className="flex items-center justify-center space-x-8">
-                        <a href="#" className="text-white/50 hover:text-[#00f0ff] transition-colors relative group">
+                    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6">
+                        <a href="mailto:shubham.sg53147@gmail.com" className="text-white/50 hover:text-[#00f0ff] transition-colors relative group">
                             <span className="flex items-center space-x-2">
                                 <Mail className="w-5 h-5" /> <span>Email</span>
                             </span>
                             <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-[#00f0ff] transition-all group-hover:w-full" />
                         </a>
-                        <a href="#" className="text-white/50 hover:text-[#b000ff] transition-colors relative group">
+                        <a href="https://www.linkedin.com/in/anon-cypher/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#b000ff] transition-colors relative group">
                             <span className="flex items-center space-x-2">
                                 <Linkedin className="w-5 h-5" /> <span>LinkedIn</span>
                             </span>
                             <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-[#b000ff] transition-all group-hover:w-full" />
                         </a>
-                        <a href="#" className="text-white/50 hover:text-white transition-colors relative group">
+                        <a href="https://github.com/anon-cypher" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors relative group">
                             <span className="flex items-center space-x-2">
                                 <Github className="w-5 h-5" /> <span>GitHub</span>
                             </span>
                             <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full" />
+                        </a>
+                        <a href="https://www.instagram.com/anon.cypher/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-[#ff3366] transition-colors relative group">
+                            <span className="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+                                <span>Instagram</span>
+                            </span>
+                            <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-[#ff3366] transition-all group-hover:w-full" />
                         </a>
                     </div>
                 </motion.div>

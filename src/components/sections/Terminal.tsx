@@ -4,30 +4,38 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 const predefinedOutputs: Record<string, string[]> = {
-    "run shubham --skills": [
-        "Loading module: AI Systems Engineer...",
-        "[OK] Python, C++, TypeScript loaded",
-        "[OK] Frameworks: PyTorch, LangChain, FastAPI, Next.js",
-        "[OK] Cloud/Ops: AWS, Docker, Kubernetes, MLflow",
-        "Ready."
+    "whoami": [
+        "Role: AI Systems Engineer | GenAI Architect",
+        "Mission: Building autonomous systems that operate reliably in real-world environments.",
+        "Focus: LLM Infrastructure, Agentic AI, RAG, and Computer Vision.",
+        "Approach: Systems-level optimization across data, models, and deployment."
     ],
-    "deploy intelligence": [
-        "Compiling neural pathways...",
-        "Connecting to Vertex edge nodes...",
-        "Injecting real-time models... Success.",
-        "Intelligence deployed globally in 1.4s"
+    "ls projects": [
+        "[01] Smart Factory Edge MLOps",
+        "[02] Document-to-JSON LLM Parser",
+        "[03] Semiconductor Defect Detection",
+        "[04] Engineering Drawing QA",
+        "[05] Real-Time Pothole Detection"
     ],
-    "optimize system --mode=rl": [
-        "Agent: Reinforcement Learning Mode Activated.",
-        "Iterating policies...",
-        "Reward found: +10.",
-        "System optimized. 60% reduction in QA effort achieved."
+    "cat experience": [
+        "2023-2026: AI Systems Engineer @ HL Mando",
+        "2022-2022: Security Automation Engineer @ BreachLock",
+        "2021-2021: AI Intern @ ThinkingStack"
+    ],
+    "list items": [
+        "[AWD] 2nd Prize @ IRTC Research",
+        "[AWD] Silver Prize @ HL Mando CTO MSI",
+        "[AWD] Spotlight Award @ HL Mando",
+        "[AWD] Best Project Award",
+        "[AWD] MSI Contribution Award"
     ],
     "help": [
         "Available commands:",
-        "  run shubham --skills",
-        "  deploy intelligence",
-        "  optimize system --mode=rl",
+        "  whoami          - Professional summary",
+        "  ls projects     - List featured deployments",
+        "  cat experience  - View system timeline",
+        "  list items      - View awards & milestones",
+        "  clear           - Clear terminal history"
     ]
 };
 
@@ -49,11 +57,16 @@ export function TerminalSection() {
 
     const handleCommand = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim()) return;
+        const cmd = input.trim().toLowerCase();
+        if (!cmd) return;
 
-        const cmd = input.trim();
-        setHistory(prev => [...prev, `> ${cmd}`]);
+        setHistory(prev => [...prev, `> ${input.trim()}`]);
         setInput("");
+
+        if (cmd === 'clear') {
+            setHistory([]);
+            return;
+        }
 
         setTimeout(() => {
             const output = predefinedOutputs[cmd] || [`bash: ${cmd}: command not found`];
@@ -62,7 +75,7 @@ export function TerminalSection() {
             output.forEach((line, index) => {
                 setTimeout(() => {
                     setHistory(prev => [...prev, line]);
-                }, index * 200);
+                }, index * 100);
             });
         }, 200);
     };
