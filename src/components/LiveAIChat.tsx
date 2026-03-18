@@ -11,11 +11,7 @@ const prompts = [
     "Describe your RAG architecture"
 ];
 
-const responses: Record<string, string> = {
-    "Explain your CV pipeline": "My standard Computer Vision pipeline utilizes YOLOv8 for rapid object detection followed by TrOCR for precise OCR, processed via PyTorch on CUDA and deployed on Edge TPUs. Inference time averages ~12ms.",
-    "How did you reduce QA by 60%?": "By introducing an automated deep-learning module that verified semantic correctness in engineering blueprints. It flagged anomalies immediately, meaning human QA only processed the 40% edge-cases.",
-    "Describe your RAG architecture": "The RAG pipeline uses Llama-2 as the reasoning engine and FAISS for vector search. Documents are parsed via a microservice, chunked, and embedded with BGE-Large before querying."
-};
+
 
 export function LiveAIChat() {
     const [isOpen, setIsOpen] = useState(false);
@@ -34,18 +30,40 @@ export function LiveAIChat() {
         if (isOpen) scrollToBottom();
     }, [messages, isOpen]);
 
-    const handleSend = (text: string) => {
+    const handleSend = async (text: string) => {
         if (!text.trim()) return;
 
-        setMessages(prev => [...prev, { role: 'user', text }]);
+        const userMessage = { role: 'user' as const, text };
+        setMessages(prev => [...prev, userMessage]);
         setInputValue("");
         setIsTyping(true);
 
-        setTimeout(() => {
-            const response = responses[text] || "I don't have simulated context for that yet. However, I am built to be highly scalable.";
-            setMessages(prev => [...prev, { role: 'ai', text: response }]);
+        try {
+            // Keep context minimal: only send the last 6 messages (approx 3 turns)
+            const recentMessages = messages.slice(-6);
+            const history = recentMessages.map(m => ({
+                role: m.role === 'ai' ? 'assistant' : 'user',
+                content: m.text
+            }));
+
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [...history, { role: 'user', content: text }]
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch response');
+
+            const data = await response.json();
+            setMessages(prev => [...prev, { role: 'ai', text: data.text }]);
+        } catch (error) {
+            console.error('Chat Error:', error);
+            setMessages(prev => [...prev, { role: 'ai', text: "I'm having trouble connecting to my neural network. Please check your connection or try again later." }]);
+        } finally {
             setIsTyping(false);
-        }, 1500);
+        }
     };
 
     return (
@@ -93,8 +111,35 @@ export function LiveAIChat() {
                                         <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-white/10' : 'bg-[#00f0ff]/20'}`}>
                                             {msg.role === 'user' ? <User className="w-3 h-3 text-white/70" /> : <Bot className="w-3 h-3 text-[#00f0ff]" />}
                                         </div>
-                                        <div className={`p-3 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-white/10 text-white rounded-br-none' : 'bg-[#111827] border border-white/5 text-white/80 rounded-bl-none'}`}>
-                                            {msg.text}
+                                        <div className={`p-3 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-white/10 text-white rounded-br-none' : 'bg-[#111827] border border-white/5 text-white/80 rounded-bl-none whitespace-pre-wrap'}`}>
+                                            {msg.role === 'ai' ? (
+                                                <div className="leading-relaxed">
+                                                    {msg.text.split(/(\*\*.*?\*\*)/).map((part, index) => {
+                                                        if (part.startsWith('**') && part.endsWith('**')) {
+                                                            return <strong key={index} className="text-[#00f0ff] font-semibold">{part.slice(2, -2)}</strong>;
+                                                        }
+
+                                                        // Handle Prefixes like [INFO] or [SYSTEM]
+                                                        if (index === 0 && part.startsWith('[')) {
+                                                            const match = part.match(/^\[(INFO|SYSTEM|ANALYSIS|LOG)\]/);
+                                                            if (match) {
+                                                                const prefix = match[0];
+                                                                const rest = part.slice(prefix.length);
+                                                                return (
+                                                                    <span key={index}>
+                                                                        <span className="text-[#00f0ff] font-mono font-bold mr-1">{prefix}</span>
+                                                                        {rest}
+                                                                    </span>
+                                                                );
+                                                            }
+                                                        }
+
+                                                        return part;
+                                                    })}
+                                                </div>
+                                            ) : (
+                                                msg.text
+                                            )}
                                         </div>
                                     </div>
                                 </div>
