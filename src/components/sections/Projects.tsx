@@ -19,6 +19,15 @@ interface Project {
 
 const projects: Project[] = [
     {
+        id: "rag-playground",
+        title: "RAG Playground",
+        category: "LLM Systems",
+        description: "Built an interactive Retrieval-Augmented Generation playground with visual node execution, OpenRouter model integration, FAISS retrieval, and embedding-space exploration for rapid RAG experimentation.",
+        tech: ["FastAPI", "React", "Vite", "FAISS", "OpenRouter"],
+        metrics: "8",
+        metricsLabel: "Core APIs",
+    },
+    {
         id: "edge",
         title: "Smart Factory Edge MLOps",
         category: "Edge Architecture",
